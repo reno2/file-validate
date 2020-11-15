@@ -14,38 +14,8 @@ const formsFile = {
     files: [],
     input: null,
     sendFiles: [],
-    formSubmit(url, e) {
-        e.preventDefault()
-        if (formsFile.sendFiles) {
-            let formData = new FormData();
-            for (let f in formsFile.sendFiles) {
-                formData.append("images[]", formsFile.sendFiles[f]);
-            }
-            axios.post(url,
-                formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }).then(function (response) {
-                console.log(response)
-            })
-        }
-    },
-    showUploadedItem(source, file) {
-        let previewList = document.querySelector(".image-preview"),
-            previewItem = `
-                <div class="image-preview__item">
-                    <img src="${source}" alt="">
-                    <span class="image-preview__name">${file.name}</span>
-                    <svg onclick="formsFile.removeFile(this)" data-name="${file.name}" class="image-preview__del">
-                        <use xlink:href="/images/icons.svg#icon-close"></use>
-                    </svg>
-                </div>
-            `;
-        if (formsFile.multiple) previewList.innerHTML += previewItem;
-        else previewList.innerHTML = previewItem;
-    },
-    init(input, formId, multiple) {
+      // Инициализация 
+      init(input, formId, multiple) {
         formsFile.multiple = multiple
         formsFile.input = input
         let form = document.getElementById(formId)
@@ -60,6 +30,39 @@ const formsFile = {
         formsFile.fileLoad(input)
 
     },
+    // Отправка фомы
+    formSubmit(url, e) {
+        e.preventDefault()
+        if (formsFile.sendFiles) {
+            let formData = new FormData();
+            for (let f in formsFile.sendFiles) {
+                formData.append("images[]", formsFile.sendFiles[f]);
+            }
+            axios.post(url,
+                formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(function (response) {
+                    console.log(response)
+                })
+            }
+        },
+    // Вывод превьюшек
+    showUploadedItem(source, file) {
+        let previewList = document.querySelector(".image-preview"),
+        previewItem = `
+        <div class="image-preview__item">
+        <img src="${source}" alt="">
+        <span class="image-preview__name">${file.name}</span>
+        <svg onclick="formsFile.removeFile(this)" data-name="${file.name}" class="image-preview__del">
+        <use xlink:href="/images/icons.svg#icon-close"></use>
+        </svg>
+        </div>
+        `;
+        if (formsFile.multiple) previewList.innerHTML += previewItem;
+        else previewList.innerHTML = previewItem;
+    },
     // Вополняем после загрузки файла
     fileLoad(input) {
         //console.log(input.length)
@@ -72,6 +75,7 @@ const formsFile = {
                 let currentFile = el;
                 // Применяем правила валидации в файлу
                 for (let code in formsFile.validateRule) {
+                    console.log(formsFile.validateRule[code].call(el, el, input))
                     if (!formsFile.validateRule[code].call(el, el, input)) {
                         valid = false;
                         break;
@@ -112,7 +116,7 @@ const formsFile = {
     validateRule: {
         limit: (file, el) => {
             let msg = 'Максимальное количество файлов 2';
-            if (Object.keys(formsFile.sendFiles).length + 1 > 2) {
+            if (Object.keys(formsFile.sendFiles).length + 1 > 2 || formsFile.input.files.length > 2) {
                 formsFile.showNotice(el, msg)
                 return false
             }
@@ -128,7 +132,7 @@ const formsFile = {
         },
         type: (file, el) => {
             let allowTypes = ['jpg', 'jpeg', 'png'],
-                msg = `Разрешены только следующие типы ${allowTypes.join(', ')}`;
+            msg = `Разрешены только следующие типы ${allowTypes.join(', ')}`;
             //console.log(file)
             let fileExtension = file.type.split("/").pop();
             if (!allowTypes.includes(fileExtension)) {
