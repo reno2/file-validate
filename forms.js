@@ -56,7 +56,7 @@ const formsFile = {
         <img src="${source}" alt="">
         <span class="image-preview__name">${file.name}</span>
         <svg onclick="formsFile.removeFile(this)" data-name="${file.name}" class="image-preview__del">
-        <use xlink:href="/images/icons.svg#icon-close"></use>
+        <use xlink:href="/icons.svg#icon-close"></use>
         </svg>
         </div>
         `;
