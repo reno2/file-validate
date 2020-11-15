@@ -6,13 +6,22 @@
 	<title>Document</title>
 </head>
 <body>
-	<form action="" class="create-form__form single-img__form" id="post-image">
-		<div class="form-group single-img__group">
-			<input multiple name="image" type="file" id="file_" class="single-img__input">
-			<div class="create-form__error"></div>
-		</div>
-		<button class="btn-block btn btn-success single-img__btn" type="submit">загрузить</button>
-	</form>
+	<div class="col-md-3 p-0 create-form__right">
+            <div class="p-3 create-form__item single-img">
+                <div class="create-form__title">Основная картинка</div>
+                <form action="/" class="create-form__form single-img__form" id="post-image"
+                      enctype="multipart/form-data">
+
+                    <div class="form-group single-img__group">
+                        <input multiple name="image" type="file" id="file_" class="single-img__input">
+                        <div class="create-form__error"></div>
+                    </div>
+                    <button class="btn-block btn btn-success single-img__btn" type="submit">загрузить</button>
+                </form>
+            </div>
+            <div id="image-list" class="create-form__preview image-preview">
+            </div>
+        </div>
 </body>
 <script src="forms.js"></script>
 </html>
