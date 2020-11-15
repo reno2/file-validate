@@ -3,13 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
         formsFile.init(this, 'post-image', true);
     })
     document.querySelector('.create-form__form').addEventListener('submit', function (e) {
-
         formsFile.formSubmit(this.getAttribute('action'), e)
     })
 
 })
 
-let formsFile = {
+const formsFile = {
     submit: null,
     multiple: false,
     files: [],
