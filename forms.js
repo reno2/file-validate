@@ -15,7 +15,7 @@ const formsFile = {
     input: null,
     sendFiles: [],
       // Инициализация 
-      init(input, formId, multiple) {
+    init(input, formId, multiple) {
         formsFile.multiple = multiple
         formsFile.input = input
         let form = document.getElementById(formId)
@@ -44,28 +44,28 @@ const formsFile = {
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(function (response) {
-                    console.log(response)
-                })
-            }
-        },
+                console.log(response)
+            })
+        }
+    },
     // Вывод превьюшек
     showUploadedItem(source, file) {
         let previewList = document.querySelector(".image-preview"),
-        previewItem = `
-        <div class="image-preview__item">
-        <img src="${source}" alt="">
-        <span class="image-preview__name">${file.name}</span>
-        <svg onclick="formsFile.removeFile(this)" data-name="${file.name}" class="image-preview__del">
-        <use xlink:href="/icons.svg#icon-close"></use>
-        </svg>
-        </div>
-        `;
+            previewItem = `
+                <div class="image-preview__item">
+                    <img src="${source}" alt="">
+                    <span class="image-preview__name">${file.name}</span>
+                    <svg onclick="formsFile.removeFile(this)" data-name="${file.name}" class="image-preview__del">
+                        <use xlink:href="/images/icons.svg#icon-close"></use>
+                    </svg>
+                </div>
+            `;
         if (formsFile.multiple) previewList.innerHTML += previewItem;
         else previewList.innerHTML = previewItem;
     },
     // Вополняем после загрузки файла
     fileLoad(input) {
-        //console.log(input.length)
+        console.log(Object.keys(formsFile.sendFiles).length)
         if (formsFile.files.length) {
 
             formsFile.removeNotice(input);
@@ -78,6 +78,7 @@ const formsFile = {
                     console.log(formsFile.validateRule[code].call(el, el, input))
                     if (!formsFile.validateRule[code].call(el, el, input)) {
                         valid = false;
+                        input.value = ""
                         break;
                     }
                 }
@@ -132,7 +133,7 @@ const formsFile = {
         },
         type: (file, el) => {
             let allowTypes = ['jpg', 'jpeg', 'png'],
-            msg = `Разрешены только следующие типы ${allowTypes.join(', ')}`;
+                msg = `Разрешены только следующие типы ${allowTypes.join(', ')}`;
             //console.log(file)
             let fileExtension = file.type.split("/").pop();
             if (!allowTypes.includes(fileExtension)) {
